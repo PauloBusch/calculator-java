@@ -4,6 +4,8 @@ import java.awt.GridBagLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.JButton;
 import javax.swing.Box;
@@ -16,10 +18,15 @@ import javax.swing.BorderFactory;
 
 public class Calculadora implements ActionListener {
 
+    private static Calculadora calc = new Calculadora();
     private static String val1 = "";
     private static String val2 = "";
-    private static Calculadora calc = new Calculadora();
+    private static String input = "";
 
+    private static final String inputV1 = "V1";
+    private static final String inputV2 = "V2";
+    private static final String inputRe = "Re";
+    
     private static JFrame frame = new JFrame("Calculadora");
     private static Font font = new Font("Arial", Font.BOLD, 20);
     
@@ -85,7 +92,7 @@ public class Calculadora implements ActionListener {
         btn8.setFont(font);
         btn9.setFont(font);
 
-        //Poosi??es
+        //Posições
         lblV1.setBounds(20, 20, 100, 35);
         lblV2.setBounds(20, 60, 100, 35);
         lblRe.setBounds(20, 100, 100, 35);
@@ -123,12 +130,7 @@ public class Calculadora implements ActionListener {
         pnlFields.add(txtV2);
         pnlFields.add(lblRe);
         pnlFields.add(txtRe);
-        //pnlFields.setLayout(new GridLayout(3,2));
         pnlFields.setSize(500, 150);
-
-        //Panes?        
-        pnlFields.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-        pnlButtons.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         //Buttons
         pnlButtons.add(btnProxVal);
@@ -153,9 +155,41 @@ public class Calculadora implements ActionListener {
         pnlButtons.add(btnClo);
 
         //Eventos
+        btnClo.addActionListener(calc);
+        btnClr.addActionListener(calc);
+        btnProxVal.addActionListener(calc);
+        
         btn0.addActionListener(calc);
+        btn1.addActionListener(calc);
+        btn2.addActionListener(calc);
+        btn3.addActionListener(calc);
+        btn4.addActionListener(calc);
+        btn5.addActionListener(calc);
+        btn6.addActionListener(calc);
+        btn7.addActionListener(calc);
+        btn8.addActionListener(calc);
+        btn9.addActionListener(calc);
 
-        //Componetnes
+        txtV1.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+                input = inputV1;
+            }
+            public void focusLost(FocusEvent e) { }
+        });
+        txtV2.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+                input = inputV2;
+            }
+            public void focusLost(FocusEvent e) { }
+        });
+        txtRe.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+                input = inputRe;
+            }
+            public void focusLost(FocusEvent e) { }
+        });
+
+        //Componentes
         frame.add(pnlFields);
         frame.add(pnlButtons);
 
@@ -163,7 +197,49 @@ public class Calculadora implements ActionListener {
         frame.setVisible(true);
     }
     public void actionPerformed(ActionEvent ev){
-
+        if(ev.getSource().equals(btnClo)){
+            System.exit(0);
+        }
+        if(ev.getSource().equals(btnClr)){
+            val1 = "";
+            val2 = "";
+            
+            txtV1.setText("");
+            txtV2.setText("");
+            txtRe.setText("");
+        }
+        if(ev.getSource().equals(btn0)){
+            setKey("0");
+        }
+        if(ev.getSource().equals(btn1)){
+            setKey("1");
+        }
+        if(ev.getSource().equals(btn2)){
+            setKey("2");
+        }
+        if(ev.getSource().equals(btn3)){
+            setKey("3");
+        }
+        if(ev.getSource().equals(btn4)){
+            setKey("4");
+        }
+        if(ev.getSource().equals(btn5)){
+            setKey("5");
+        }
+        if(ev.getSource().equals(btn6)){
+            setKey("6");
+        }
+        if(ev.getSource().equals(btn7)){
+            setKey("7");
+        }
+        if(ev.getSource().equals(btn8)){
+            setKey("8");
+        }
+        if(ev.getSource().equals(btn9)){
+            setKey("9");
+        }
+    }
+    private static void setKey(String str){
 
     }
 }
