@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.Box;
 import javax.swing.JFrame;
@@ -19,13 +20,21 @@ import javax.swing.BorderFactory;
 public class Calculadora implements ActionListener {
 
     private static Calculadora calc = new Calculadora();
+    private static Arithmetic art = new Arithmetic();
     private static String val1 = "";
     private static String val2 = "";
+
     private static String input = "";
+    private static String oper = "";
 
     private static final String inputV1 = "V1";
     private static final String inputV2 = "V2";
     private static final String inputRe = "Re";
+
+    private static final String operSom = "+";
+    private static final String operSub = "-";
+    private static final String operDiv = "/";
+    private static final String operMul = "*";
     
     private static JFrame frame = new JFrame("Calculadora");
     private static Font font = new Font("Arial", Font.BOLD, 20);
@@ -41,7 +50,7 @@ public class Calculadora implements ActionListener {
     private static JTextField txtV2 = new JTextField(5);
     private static JTextField txtRe = new JTextField(5);
 
-    private static JButton btnProxVal = new JButton("PrÃ³ximo Valor");
+    private static JButton btnProxVal = new JButton("Próximo Valor");
     private static JButton btnClr = new JButton("Limpar");
     private static JButton btnClo = new JButton("Fechar");
 
@@ -65,7 +74,7 @@ public class Calculadora implements ActionListener {
 
     public static void main(String arg[]){
         
-        //FormataÃ§Ã£o
+        //Formatação
         lblV1.setFont(font);
         lblV2.setFont(font);
         lblRe.setFont(font);
@@ -92,7 +101,7 @@ public class Calculadora implements ActionListener {
         btn8.setFont(font);
         btn9.setFont(font);
 
-        //PosiÃ§Ãµes
+        //Posições
         lblV1.setBounds(20, 20, 100, 35);
         lblV2.setBounds(20, 60, 100, 35);
         lblRe.setBounds(20, 100, 100, 35);
@@ -150,6 +159,7 @@ public class Calculadora implements ActionListener {
         pnlButtons.add(btnSub);
         pnlButtons.add(btnDiv);
         pnlButtons.add(btnMul);
+
         pnlButtons.add(btnCal);
         pnlButtons.add(btnClr);
         pnlButtons.add(btnClo);
@@ -158,6 +168,13 @@ public class Calculadora implements ActionListener {
         btnClo.addActionListener(calc);
         btnClr.addActionListener(calc);
         btnProxVal.addActionListener(calc);
+
+        btnCal.addActionListener(calc);
+
+        btnSom.addActionListener(calc);
+        btnSub.addActionListener(calc);
+        btnDiv.addActionListener(calc);
+        btnMul.addActionListener(calc);
         
         btn0.addActionListener(calc);
         btn1.addActionListener(calc);
@@ -200,13 +217,77 @@ public class Calculadora implements ActionListener {
         if(ev.getSource().equals(btnClo)){
             System.exit(0);
         }
+        if(ev.getSource().equals(btnCal)){
+            float v1 = 0.0f;
+            float v2 = 0.0f;
+            float r = 0.0f;
+            updateValues();
+            try{
+                v1 = Float.parseFloat(val1);
+                v2 = Float.parseFloat(val2);
+
+                switch(oper){
+                    case operSom:
+                        r = art.soma(v1, v2);
+                        break;
+                    case operSub:
+                        r = art.subtrai(v1, v2);
+                        break;
+                    case operDiv:
+                        r = art.divide(v1, v2);
+                        break;
+                    case operMul:
+                        r = art.multiplica(v1, v2);
+                        break;
+                }
+
+            }catch(NumberFormatException ex){
+                JOptionPane.showMessageDialog(null, 
+                    "Valor inválido", 
+                    "Erro", 
+                    JOptionPane.WARNING_MESSAGE);
+            }catch(NegaException ex){
+                JOptionPane.showMessageDialog(null, 
+                    "Resultado negativo", 
+                    "Erro", 
+                    JOptionPane.OK_OPTION);
+            }catch(ArithmeticException ex){
+                JOptionPane.showMessageDialog(null, 
+                    "Divisãop por zero", 
+                    "Erro", 
+                    JOptionPane.OK_OPTION);
+
+                val2 = "";
+                txtV2.setText("");
+            }
+            txtRe.setText(Float.toString(r));
+            txtV1.requestFocus();
+        }
+        if(ev.getSource().equals(btnSom)){
+            oper = operSom;
+            txtV2.requestFocus();
+        }
+        if(ev.getSource().equals(btnSub)){
+            oper = operSub;
+            txtV2.requestFocus();
+        }
+        if(ev.getSource().equals(btnDiv)){
+            oper = operDiv;
+            txtV2.requestFocus();
+        }
+        if(ev.getSource().equals(btnMul)){
+            oper = operMul;
+            txtV2.requestFocus();
+        }
         if(ev.getSource().equals(btnClr)){
             val1 = "";
             val2 = "";
+            oper = "";
             
             txtV1.setText("");
             txtV2.setText("");
             txtRe.setText("");
+            txtV1.requestFocus();
         }
         if(ev.getSource().equals(btnProxVal)){
             switch(input){
@@ -263,5 +344,10 @@ public class Calculadora implements ActionListener {
             case inputRe:
                 break;
         }
+        updateValues();
+    }
+    private static void updateValues(){
+        val1 = txtV1.getText();
+        val2 = txtV2.getText();
     }
 }
