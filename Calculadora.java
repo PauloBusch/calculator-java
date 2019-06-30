@@ -208,6 +208,19 @@ public class Calculadora implements ActionListener {
             txtV2.setText("");
             txtRe.setText("");
         }
+        if(ev.getSource().equals(btnProxVal)){
+            switch(input){
+                case inputV1:
+                    txtV2.requestFocus();
+                    break;
+                case inputV2:
+                    txtV1.requestFocus();
+                    break;
+                default:
+                    txtV1.requestFocus();
+                    break;
+            }
+        }
         if(ev.getSource().equals(btn0)){
             setKey("0");
         }
@@ -240,6 +253,15 @@ public class Calculadora implements ActionListener {
         }
     }
     private static void setKey(String str){
-
+        switch(input){
+            case inputV1:
+                txtV1.setText(txtV1.getText() + str);
+                break;
+            case inputV2:
+                txtV2.setText(txtV2.getText() + str);
+                break;
+            case inputRe:
+                break;
+        }
     }
 }
